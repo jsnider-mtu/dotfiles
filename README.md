@@ -13,3 +13,4 @@ vim
 acpi
 unity-settings-daemon
 pulseaudio
+conky
