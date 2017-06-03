@@ -1,0 +1,41 @@
+#!/bin/bash
+STATUS=`cmus-remote -Q|sed -n 's/^status \(.*\)$/\1/p'`
+if [ $BLOCK_BUTTON ]
+then
+  if [ $BLOCK_BUTTON -eq 1 ]
+  then
+    if [ $STATUS == 'playing' ]
+    then
+      cmus-remote -u
+      echo "Paused"
+      exit 0
+    elif [ $STATUS == 'paused' ]
+    then
+      cmus-remote -p
+      echo "Playing"
+      exit 0
+    fi
+  fi
+  if [ $BLOCK_BUTTON -eq 3 ]
+  then
+    cmus-remote -n
+    echo "Next"
+    echo
+    echo "#a10018"
+    exit 0
+  fi
+fi
+if [ ! `ps u|grep cmus|grep -v grep` ]
+then
+  echo "Is Off"
+  echo
+  echo "#226688"
+  exit 0
+else
+  ARTIST=`cmus-remote -Q|sed -n 's/^tag artist \(.*\)$/\1/p'`
+  TITLE=`cmus-remote -Q|sed -n 's/^tag title \(.*\)$/\1/p'`
+  echo "$ARTIST - $TITLE"
+  echo "$TITLE"
+  echo "#226688"
+  exit 0
+fi

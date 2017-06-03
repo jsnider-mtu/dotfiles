@@ -1,0 +1,31 @@
+#!/bin/bash
+
+pidFile=$HOME/.local/bin/bgSlideshow.pid
+
+wallpapers=$HOME/Pictures/wallpapers/
+
+slides () {
+  # Create a shuffled list of the current images in the wallpapers dir
+  ls $wallpapers | shuf > $wallpapers/.bgList
+
+  # Read through the list
+  while read line
+  do
+    feh --no-fehbg --image-bg black --bg-fill $wallpapers/$line
+    sleep 30
+  done < $wallpapers/.bgList
+
+  # Repeat
+  slides
+}
+
+# Ensure only one process is running
+if [ -e $pidFile ]
+then
+  kill `cat $pidFile`
+  rm $pidFile
+fi
+
+echo $$ > $pidFile
+
+slides
