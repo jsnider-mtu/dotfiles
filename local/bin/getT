@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# I have the URL to the UI, get me that embed code baby!!!!!!!!!!!!!!!!!
+
+if [[ $# -eq 1 ]]; then
+  line=$1
+  t=1
+else
+  line=`cat ~/.t`
+  t=0
+fi
+
+list=`echo $line|tr \| ' '`
+
+for x in $list
+do
+  echo "Grabbing $x"
+  EMBED_URL=`curl -s $x|grep 'embedframe/[0-9]\{1,\}'|cut -d\& -f7|cut -d\; -f2`
+  xvideos-dl $EMBED_URL
+  echo -e "\nDone with $x\n"
+done
+
+if [[ $t -eq 0 ]]; then
+  echo "Cleaning up source file"
+  rm ~/.t
+fi
