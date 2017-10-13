@@ -14,3 +14,4 @@ acpi
 unity-settings-daemon
 pulseaudio
 conky
+handbrake-cli
