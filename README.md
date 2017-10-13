@@ -18,3 +18,4 @@ pulseaudio
 conky
 handbrake-cli
 brave
+ffmpeg
