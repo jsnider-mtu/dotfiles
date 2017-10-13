@@ -15,3 +15,4 @@ unity-settings-daemon
 pulseaudio
 conky
 handbrake-cli
+brave
