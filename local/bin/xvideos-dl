@@ -171,5 +171,13 @@ else
   leadingzeroes $LAST_NUM
 fi
 
-cat ~/.tmp/*ts > ~/.a/${URL##*/}.ts
+cat $(ls -vl ~/.tmp/*ts|awk '{print $9}'|xargs) > ~/.a/${URL##*/}.ts
 rm -r ~/.tmp
+
+# Now re-encode to get rid of the choppy bits
+# This part sucks, replacing with ffmpeg
+ffmpeg -i ~/.a/${URL##*/}.ts -acodec copy -vcodec copy ~/.a/${URL##*/}.mp4
+
+echo ""
+echo "Done, you motherfucker. Cleaning up now."
+rm ~/.a/${URL##*/}.ts
