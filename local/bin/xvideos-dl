@@ -138,6 +138,11 @@ HLS_URL=`curl -s -c ~/.tmp/cookies "$URL"       | # download HTML using curl
 # since they've already standardized the naming scheme for me)
 HIGHEST_RES=`highestres "$HLS_URL"`  # This needs to actually recreate the URL entirely
 #echo "DEBUG: HIGHEST_RES = $HIGHEST_RES"
+if [[ -f ~/.a/${URL##*/}_${HIGHEST_RES}.mp4 ]]; then
+  rm -r ~/.tmp
+  echo -e "\nFile already exists, fuck extra work\n"
+  exit 2
+fi
 if [[ $HIGHEST_RES =~ ^[23]{1} ]]; then  # If highest resolution begins with 2 or 3 then skip this video
   # Do cleanup early and exit
   rm -r ~/.tmp
