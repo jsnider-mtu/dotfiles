@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# I have the URL to the UI, get me that embed code baby!!!!!!!!!!!!!!!!!
+# Let's clean up some space if possible first
+find ~/.a/ -mtime +3 -delete
 
 if [[ $# -eq 1 ]]; then
   line=$1
