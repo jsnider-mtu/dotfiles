@@ -66,36 +66,13 @@ highestres() {
 
 leadingzeroes() {
 
-  if [[ $1 -lt 10 ]]; then
-    LEAD=0
-    LEADC=0
-  elif [[ $1 -lt 100 ]]; then
-    LEAD=1
-    LEADC=1
-  elif [[ $1 -lt 1000  ]]; then
-    LEAD=10
-    LEADC=1
-  fi
-#  echo "DEBUG: LEAD = $LEAD"
-
-  # Add them
-  LIST=''
   for ((i=0;i<=LAST_NUM;i++)); do
-    if [[ $i -lt $(($LEAD*10)) ]]; then
-      LIST=$LIST`printf "/home/josh/.tmp/hls-${HIGHEST_RES}0%.0s$i.ts " $LEADC`
+    if [[ $i -lt 10 ]]; then
+      mv ~/.tmp/hls-$HIGHEST_RES$i.ts ~/.tmp/00$i.ts
+    elif [[ $i -lt 100 ]]; then
+      mv ~/.tmp/hls-$HIGHEST_RES$i.ts ~/.tmp/0$i.ts
     else
-      : # do nothing
-    fi
-  done
-#  echo "DEBUG: LIST = $LIST"
-
-  # Move the files
-  for destFile in $LIST; do
-    if [[ ! -f $destFile ]]; then
-      # determine number, go from there
-      NUM=`echo $destFile | cut -dp -f3 | cut -d\. -f1`
-      mv ~/.tmp/hls-$HIGHEST_RES${NUM#0}.ts $destFile
-#      echo "DEBUG: I moved ~/.tmp/hls-$HIGHEST_RES${NUM%0}.ts to $destFile"
+      mv ~/.tmp/hls-$HIGHEST_RES$i.ts ~/.tmp/$i.ts
     fi
   done
 
