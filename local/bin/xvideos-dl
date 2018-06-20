@@ -45,7 +45,7 @@ echo "Extracting video URL from.. ==> $URL"
 # Changing this declaration to account for site changes
 # For one, returned html is pre-formatted, so just do the
 # curl  and grep and be done with it
-HLS_URL=`curl -s -c ~/.tmp/cookies "$URL"       | # download HTML using curl
+HLS_URL=`curl -s -c ~/.tmp/cookies "$URL"     | # download HTML using curl
         grep 'html5player.setVideoHLS'        | # locate lines with "html5player.setVideoHLS"
         cut -d\' -f2`                           # clean up a little
 
@@ -76,7 +76,7 @@ fi
 HIGHEST_URL=`echo "${HLS_URL/hls.m3u8/hls-$HIGHEST_RES.m3u8}"` # URL Encode fixes
 #echo "DEBUG: HIGHEST_URL = $HIGHEST_URL"
 
-LAST_SEG=`curl -s -c ~/.tmp/cookies "$HIGHEST_URL"              | # download HTML using curl
+LAST_SEG=`curl -s -c ~/.tmp/cookies "$HIGHEST_URL"            | # download HTML using curl
           tail -2|head -1`                                      # just need the last segment
 #echo "DEBUG: LAST_SEG = $LAST_SEG"
 
