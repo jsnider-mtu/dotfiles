@@ -6,58 +6,6 @@ if [[ ! -d ~/.a ]]; then
   mkdir ~/.a
 fi
 
-show_help()
-{
-    echo "Usage: $CMD <URL> [FORCE={0/1}]"
-}
-
-find_unique_filename()
-{
-    if [ $# -ne 2 ]; then
-        echo "Fail! -- Expecting 2 arguments! ==> $@"
-        return 1 # non-zero as false
-    fi
-    local UNIQUE_FILENAME_VAR=$1
-    local FILENAME=$2
-    if [ -f $FILENAME ]; then
-        COUNTER=0
-        while [ -f $FILENAME ]; do
-            echo "File exists: `basename $FILENAME`"
-            local NEW_FILENAME=`echo $FILENAME | sed "s#\(.*\)-[0-9]\+\.#\1-$COUNTER\.#g"`
-            if [ "$NEW_FILENAME" == "$FILENAME" ]; then
-                NEW_FILENAME=`echo $FILENAME | sed "s#\(.*\)\.#\1-$COUNTER\.#g"`
-            fi
-            FILENAME=$NEW_FILENAME
-            COUNTER=$(( $COUNTER + 1 ))
-        done
-        echo "Next unique filename: `basename $FILENAME`"
-    fi
-    eval "$UNIQUE_FILENAME_VAR=$FILENAME"
-}
-
-cleanup()
-{
-    if [ $# -ne 3 ]; then
-        echo "Fail! -- Expecting 3 argument! ==> $@"
-        return 1 # non-zero as false
-    fi
-    local PLACEHOLDER_TEMP=$1
-    local PARTIAL_TEMP=$2
-    local DONE_VAR=$3
-    local DONE_VALUE=0
-    eval "DONE_VALUE=\$$DONE_VAR"
-    if [ $DONE_VALUE -eq 0 ]; then
-        if [ -f $PLACEHOLDER_TEMP ]; then
-            echo  "Safely removing placeholder temp file ==> $PLACEHOLDER_TEMP"
-            rm -f $PLACEHOLDER_TEMP
-        fi
-    fi
-    if [ -f $PARTIAL_TEMP ]; then
-        echo  "Safely removing partial temp file ==> $PARTIAL_TEMP"
-        rm -f $PARTIAL_TEMP
-    fi
-}
-
 highestres() {
 
   curl -s -c ~/.tmp/cookies "$1"|grep RESOLUTION|sed 's/^.*,NAME="\(.*\)"$/\1/'|sort -h|tail -1
