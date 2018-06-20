@@ -1,7 +1,5 @@
 #!/bin/bash
 
-CMD=`basename $0` # Who am I?
-
 if [[ ! -d ~/.a ]]; then
   mkdir ~/.a
 fi
@@ -26,9 +24,8 @@ leadingzeroes() {
 
 }
 
-if [ $# -ne 1 -a $# -ne 2 ]; then
-    echo "Fail! -- Expecting 1 or 2 arguments! ==> $@"
-    show_help
+if [ $# -ne 1 ]; then
+    echo "Fail! -- Expecting 1 argument! ==> $@"
     exit 1
 fi
 
@@ -39,11 +36,6 @@ if [ -z "`which curl`" ]; then
 fi
 
 URL=$1
-FORCE=$2
-
-if [ -z "$FORCE" ]; then
-    FORCE=0
-fi
 
 echo ""
 echo "Extracting video URL from.. ==> $URL"
