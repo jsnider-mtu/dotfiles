@@ -100,7 +100,7 @@ else
   LAST_NUM=`echo $REAL_LAST_SEG|rev|sed 's/^st\.\([0-9]\{1,\}\).*$/\1/'|rev`
 #  echo "DEBUG: LAST_NUM = $LAST_NUM"
   for ((i=0;i<=LAST_NUM;i++)); do echo ${HLS_URL/hls.m3u8/hls-$HIGHEST_RES${i}.ts}; done | xargs -n 1 -P 8 wget -q -P ~/.tmp
-  for ((i=0;i<=LAST_NUM;i++)); do mv ~/.tmp/hls-$HIGHEST_RES${i}.ts?$PARAMETERS ~/.tmp/hls-$HIGHEST_RES${i}.ts; done
+  for ((i=0;i<=LAST_NUM;i++)); do mv ~/.tmp/hls-$HIGHEST_RES${i}.ts* ~/.tmp/hls-$HIGHEST_RES${i}.ts; done
   leadingzeroes $LAST_NUM
 fi
 
