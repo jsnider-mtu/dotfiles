@@ -6,7 +6,7 @@ fi
 
 highestres() {
 
-  curl -s -c ~/.tmp/cookies "$1"|grep RESOLUTION|sed 's/^.*,NAME="\(.*\)"$/\1/'|sort -h|tail -1
+  curl -sL -c ~/.tmp/cookies "$1"|grep RESOLUTION|sed 's/^.*,NAME="\(.*\)"$/\1/'|sort -h|tail -1
 
 }
 
@@ -45,10 +45,11 @@ echo "Extracting video URL from.. ==> $URL"
 # Changing this declaration to account for site changes
 # For one, returned html is pre-formatted, so just do the
 # curl  and grep and be done with it
-HLS_URL=`curl -s -c ~/.tmp/cookies "$URL"     | # download HTML using curl
+HLS_URL=`curl -sL -c ~/.tmp/cookies "$URL"    | # download HTML using curl
         grep 'html5player.setVideoHLS'        | # locate lines with "html5player.setVideoHLS"
         cut -d\' -f2`                           # clean up a little
 
+#echo "DEBUG: HLS_URL = $HLS_URL"
 # Turns out video titles (therefore: URLs) can change and nothing is returned for HLS_URL
 # We should probably exit here and explain the situation
 if [[ -z $HLS_URL ]]; then
@@ -76,7 +77,7 @@ fi
 HIGHEST_URL=`echo "${HLS_URL/hls.m3u8/hls-$HIGHEST_RES.m3u8}"` # URL Encode fixes
 #echo "DEBUG: HIGHEST_URL = $HIGHEST_URL"
 
-LAST_SEG=`curl -s -c ~/.tmp/cookies "$HIGHEST_URL"            | # download HTML using curl
+LAST_SEG=`curl -sL -c ~/.tmp/cookies "$HIGHEST_URL"            | # download HTML using curl
           tail -2|head -1`                                      # just need the last segment
 #echo "DEBUG: LAST_SEG = $LAST_SEG"
 
