@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Let's clean up some space if possible first
-find ~/.a/ -mtime +3 -delete
+if [ -d ~/.a ]; then
+  find ~/.a/ -mtime +3 -delete
+fi
 
 if [[ $# -eq 1 ]]; then
   line=$1
