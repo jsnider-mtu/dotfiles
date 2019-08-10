@@ -61,8 +61,10 @@ fi
 # Then grab that manifest file to get a list of segments (or just the last in the enumeration
 # since they've already standardized the naming scheme for me)
 HIGHEST_RES=`highestres "$HLS_URL"`  # This needs to actually recreate the URL entirely
+HIGHEST_FILE=`curl -sL -c ~/.tmp/cookies "$HLS_URL"|grep -m1 -A1 "$HIGHEST_RES"|tail -1|cut -d'?' -f1`
+#echo "DEBUG: HIGHEST_FILE = $HIGHEST_FILE"
 #echo "DEBUG: HIGHEST_RES = $HIGHEST_RES"
-if [[ -f ~/.a/${URL##*/}_${HIGHEST_RES}.mp4 ]]; then
+if [[ -f ~/.a/${URL##*/}_${HIGHEST_RES}.mp4 || -f ~/.a/.b/${URL##*/}_${HIGHEST_RES}.mp4 ]]; then
   echo -e "\nFile already exists, fuck extra work\n"
   exit 2
 fi
@@ -74,9 +76,10 @@ fi
 # Need to form the next url and then parse the response for last segment
 # second to last line
 #echo "DEBUG: HLS_URL = $HLS_URL"
-HIGHEST_URL=`echo "${HLS_URL/hls.m3u8/hls-$HIGHEST_RES.m3u8}"` # URL Encode fixes
+HIGHEST_URL=`echo "${HLS_URL/hls.m3u8/$HIGHEST_FILE}"` # URL Encode fixes
 #echo "DEBUG: HIGHEST_URL = $HIGHEST_URL"
-
+FIRST_SEG=`curl -sL -c ~/.tmp/cookies "$HIGHEST_URL"|grep -m1 ^hls-|sed 's/^\(.*\)0\.ts.*$/\1/'`
+#echo "DEBUG: FIRST_SEG = $FIRST_SEG"
 LAST_SEG=`curl -sL -c ~/.tmp/cookies "$HIGHEST_URL"            | # download HTML using curl
           tail -2|head -1`                                      # just need the last segment
 #echo "DEBUG: LAST_SEG = $LAST_SEG"
@@ -93,15 +96,24 @@ mkdir ~/.tmp 2>/dev/null
 
 # Now let's generate the enumerated filename list and download in parallel
 if [[ -z $PARAMETERS ]]; then
-  LAST_NUM=`echo $LAST_SEG|rev|sed 's/^st\.\([0-9]\{1,\}\).*$/\1/'|rev`
+  #LAST_SEC=`echo $LAST_SEG|rev|sed 's/^st\.\([0-9a-zA-Z]\{1,\}-\?\)p0.*$/\1/'|rev`
+  #LAST_NUM=`echo $LAST_SEC|sed 's/-[0-9a-zA-Z]//'`
+  LAST_NUM=`echo $LAST_SEG|sed "s/${FIRST_SEG}//;s/\([0-9]\{1,\}\)\.ts/\1/"`
 #  echo "DEBUG: LAST_NUM = $LAST_NUM"
-  for ((i=0;i<=LAST_NUM;i++)); do echo ${HLS_URL/hls.m3u8/hls-$HIGHEST_RES$i}.ts; done | xargs -n 1 -P 8 wget -q -P ~/.tmp
+  #for ((i=0;i<=LAST_NUM;i++)); do echo ${HLS_URL/hls.m3u8/hls-$HIGHEST_RES$i}.ts; done | xargs -n 1 -P 8 wget -q -P ~/.tmp
+  for ((i=0;i<=LAST_NUM;i++)); do echo ${HLS_URL/hls.m3u8/$FIRST_SEG${i}.ts}; done | xargs -n 1 -P 8 wget -q -P ~/.tmp
+  if [[ $FIRST_SEG != "hls-$HIGHEST_RES" ]]; then
+    for ((i=0;i<=LAST_NUM;i++)); do mv ~/.tmp/$FIRST_SEG${i}.ts ~/.tmp/hls-$HIGHEST_RES${i}.ts; done
+  fi
   leadingzeroes $LAST_NUM
 else
-  LAST_NUM=`echo $REAL_LAST_SEG|rev|sed 's/^st\.\([0-9]\{1,\}\).*$/\1/'|rev`
+  LAST_NUM=`echo $REAL_LAST_SEG|sed "s/${FIRST_SEG}//;s/\([0-9]\{1,\}\)\.ts/\1/"`
+  #LAST_NUM=`echo $REAL_LAST_SEG|rev|sed 's/^st\.\([0-9]\{1,\}\).*$/\1/'|rev`
 #  echo "DEBUG: LAST_NUM = $LAST_NUM"
-  for ((i=0;i<=LAST_NUM;i++)); do echo ${HLS_URL/hls.m3u8/hls-$HIGHEST_RES${i}.ts}; done | xargs -n 1 -P 8 wget -q -P ~/.tmp
-  for ((i=0;i<=LAST_NUM;i++)); do mv ~/.tmp/hls-$HIGHEST_RES${i}.ts* ~/.tmp/hls-$HIGHEST_RES${i}.ts; done
+  for ((i=0;i<=LAST_NUM;i++)); do echo ${HLS_URL/hls.m3u8/$FIRST_SEG${i}.ts}; done | xargs -n 1 -P 8 wget -q -P ~/.tmp
+  #for ((i=0;i<=LAST_NUM;i++)); do echo ${HLS_URL/hls.m3u8/hls-$HIGHEST_RES${i}.ts}; done | xargs -n 1 -P 8 wget -q -P ~/.tmp
+  #for ((i=0;i<=LAST_NUM;i++)); do mv ~/.tmp/hls-$HIGHEST_RES${i}.ts* ~/.tmp/hls-$HIGHEST_RES${i}.ts; done
+  for ((i=0;i<=LAST_NUM;i++)); do mv ~/.tmp/$FIRST_SEG${i}.ts* ~/.tmp/hls-$HIGHEST_RES${i}.ts; done
   leadingzeroes $LAST_NUM
 fi
 
