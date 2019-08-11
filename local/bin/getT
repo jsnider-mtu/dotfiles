@@ -2,7 +2,7 @@
 
 # Let's clean up some space if possible first
 if [ -d ~/.a ]; then
-  find ~/.a/ -mtime +3 -delete
+  find ~/.a/ -type f -mtime +3 -delete
 fi
 
 if [[ $# -eq 1 ]]; then
