@@ -1,0 +1,134 @@
+#!/bin/bash
+set -eo pipefail
+
+###
+# Downloads a web file and then opens it
+#
+# --WARNING--
+# ONLY USE WITH TRUSTED FILES AND WEBSITES!
+# SUPER-DUPER INSECURE!!!
+# --WARNING--
+###
+
+function warningmsg() {
+    echo
+    echo -e '\033[31;1m--WARNING--'
+    echo 'DO NOT DISABLE THE VIRUSTOTAL CHECK UNLESS ABSOLUTELY SURE!'
+    echo "THAT'S SUPER-DUPER RISKY!!!"
+    echo -e '--WARNING--\033[0m'
+    echo
+}
+
+# Show usage if run without arguments, too many arguments,
+# or when asked for help
+if [[ ($# -ne 1 && $# -ne 2 && $# -ne 3) || $1 == '--help' ]]; then
+    echo 'Usage: fetch "URL" [--no-vt] [dest-dir]'
+    echo -e "[--no-vt]\tDo not check the file with virustotal  \033[31;1mNOT RECOMMENDED!\033[0m"
+    echo -e '[dest-dir]\tDestination directory'
+    echo -e '\nEither have the env var $VT_API_KEY set with your virustotal'
+    echo 'API key, or input it at the prompt'
+    warningmsg
+    exit 0
+fi
+
+# What is "fetch"?
+if [ $1 == '--mean' ]; then
+    open "https://www.youtube.com/watch?v=Pubd-spHN-0"
+    exit 0
+fi
+
+# Warn the user and get confirmation before starting
+function confirmnovt() {
+    WARNPROMPT=`echo -e '\033[32mSure you want to continue? (y|Y to continue): \033[0m'`
+    warningmsg
+    read -t 30 -p "$WARNPROMPT"
+    if [[ $REPLY =~ ^[yY] ]]; then
+        echo -e "\nYou asked for it..\n"
+    else
+        echo -e "\nAborting..\n"
+        exit 0
+    fi
+}
+
+# Decode the filename and prepend the directory
+function urldecode() {
+    echo "$2/$(: "${1##*/}"; : "${_//+/ }"; echo -e "${_//%/\\x}")"
+}
+
+# Use virustotal unless explicitly refused
+function vtupload() {
+    # If file is too big, exit and tell user to open at own risk
+    if [[ $(ls -l "$1" | awk '{print $5}') -gt 650000000 ]]; then
+        echo -e '\033[31mFile is too large to scan with virustotal'
+        echo -e 'Open at your own risk\033[0m'
+        exit 1
+    fi
+
+    # Get API key
+    if [ -z "$VT_API_KEY" ]; then
+        echo -e '\033[31mEnvironment variable $VT_API_KEY is not set\033[0m'
+        read -s -p 'Input your API key now (<Enter> or <Ctrl-C> to abort): ' VT_API_KEY EXCESSWORDS
+        echo
+        if [ -z "$VT_API_KEY" ]; then
+            echo -e "\nAborting..\n"
+            exit 2
+        fi
+    fi
+
+    # Grab upload URL
+    echo
+    echo -e "Uploading to virustotal..\n"
+    UPLOAD_URL=`curl -sSfL -H "x-apikey: $VT_API_KEY" \
+        -H "Accept: application/json" \
+        "https://www.virustotal.com/api/v3/files/upload_url" |\
+        jq '.data' | tr -d '"'`
+    # Grab analysis report URL
+    ANALYSIS=`curl -fL --progress-bar \
+        -H "x-apikey: $VT_API_KEY" \
+        -H "Content-Type: multipart/form-data" \
+        -H "Accept: application/json" -F file=@"$1" \
+        "$UPLOAD_URL" | tee /tmp/vtAnalysisURL.json`
+    ANALYSISURL=`jq '.data.links.self' /tmp/vtAnalysisURL.json | tr -d '"'`
+    rm /tmp/vtAnalysisURL.json
+    # Grab suspicious and malicious stats
+    curl -sSfL -o /tmp/vtAnalysisReport.json \
+        -H "x-apikey: $VT_API_KEY" \
+        -H "Accept: application/json" "$ANALYSISURL"
+    SUS=`jq '.data.attributes.stats.suspicious' /tmp/vtAnalysisReport.json`
+    MAL=`jq '.data.attributes.stats.malicious' /tmp/vtAnalysisReport.json`
+    rm /tmp/vtAnalysisReport.json
+
+    # If unsafe, warn user and exit
+    if [[ $SUS -gt 0 || $MAL -gt 0 ]]; then
+        echo -e "\n\033[31;1m$(($SUS+$MAL)) scans found this file suspicious \
+        and/or malicious"
+        echo -e "Open at your own risk\033[0m"
+        exit 3
+    fi
+
+    # File checks out, continue
+    echo -e "\n\033[32mFile checks out, opening..\033[0m"
+}
+
+# wget and then open the file
+echo
+if [[ $# -eq 1 ]]; then
+    wget -q --show-progress -nc "$1"
+    vtupload "$(urldecode "$1" .)"
+    open "$(urldecode "$1" .)"
+elif [[ $# -eq 2 && $2 != '--no-vt' ]]; then
+    wget -q --show-progress -nc -P "$2" "$1"
+    vtupload "$(urldecode "$1" "$2")"
+    open "$(urldecode "$1" "$2")"
+elif [[ $# -eq 2 && $2 == '--no-vt' ]]; then
+    wget -q --show-progress -nc "$1"
+    confirmnovt
+    open "$(urldecode "$1" .)"
+elif [[ $# -eq 3 && $2 == '--no-vt' ]]; then
+    wget -q --show-progress -nc -P "$3" "$1"
+    confirmnovt
+    open "$(urldecode "$1" "$3")"
+else
+    echo "Second argument ($2) not recognized, aborting.."
+    exit 4
+fi
