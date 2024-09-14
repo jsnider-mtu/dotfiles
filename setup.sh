@@ -26,8 +26,6 @@ apt-get install -y i3 \
                    shutter \
                    compton
 
-sudo -u josh -i
-
 #mv /tmp/dotfiles/bashrc ~/.bashrc
 #
 #mv /tmp/dotfiles/pinerc ~/.pinerc
@@ -48,6 +46,7 @@ for x in $(ls /tmp/dotfiles); do
   if [[ ${x} == "README.md" ]]; then
     continue
   fi
-  mv /tmp/dotfiles/${x} "~/.${x}"
+  mv /tmp/dotfiles/${x} "/home/josh/.${x}"
 done
 
+chown -R josh:josh /home/josh
