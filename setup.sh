@@ -21,8 +21,6 @@ useradd -d /home/josh -m -s /bin/bash -U josh
 
 sudo -u josh -i
 
-git clone https://github.com/jsnider-mtu/dotfiles.git /tmp
-
 #mv /tmp/dotfiles/bashrc ~/.bashrc
 #
 #mv /tmp/dotfiles/pinerc ~/.pinerc
