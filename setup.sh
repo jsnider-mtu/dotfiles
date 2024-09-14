@@ -12,7 +12,7 @@ apt-get install -y i3 \
                    acpi \
                    unity-settings-daemon \
                    pulseaudio \
-                   conky \
+                   conky-all \
                    handbrake-cli \
                    brave \
                    ffmpeg \
