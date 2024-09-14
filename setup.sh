@@ -15,7 +15,18 @@ apt-get install -y i3 \
                    handbrake-cli \
                    brave \
                    ffmpeg \
-                   fonts-font-awesome
+                   fonts-font-awesome \
+                   xnumlock \
+                   xbacklight \
+                   clipit \
+                   gcc \
+                   git \
+                   terminator \
+                   pcmanfm \
+                   libnotify-bin \
+                   htop \
+                   shutter \
+                   compton
 
 useradd -d /home/josh -m -s /bin/bash -U josh
 
