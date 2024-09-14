@@ -4,6 +4,7 @@ set -eo pipefail
 apt-get update -y
 
 apt-get install -y i3 \
+                   numlockx \
                    i3blocks \
                    mpd \
                    ncmpcpp \
@@ -25,6 +26,8 @@ apt-get install -y i3 \
                    htop \
                    shutter \
                    compton
+
+echo $?
 
 #mv /tmp/dotfiles/bashrc ~/.bashrc
 #
