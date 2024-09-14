@@ -49,7 +49,7 @@ for x in $(ls /tmp/dotfiles); do
   if [[ ${x} == "README.md" ]]; then
     continue
   fi
-  mv /tmp/dotfiles/${x} "/home/josh/.${x}"
+  mv -f /tmp/dotfiles/${x} "/home/josh/.${x}"
 done
 
 chown -R josh:josh /home/josh
