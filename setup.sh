@@ -58,3 +58,5 @@ done
 chown -R josh:josh /home/josh
 
 rm -rf /tmp/dotfiles
+
+reboot
