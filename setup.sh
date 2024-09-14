@@ -4,6 +4,7 @@ set -eo pipefail
 apt-get update -y
 
 apt-get install -y i3 \
+                   qiv \
                    numlockx \
                    i3blocks \
                    mpd \
