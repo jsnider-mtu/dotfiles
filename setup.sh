@@ -28,8 +28,6 @@ apt-get install -y i3 \
                    shutter \
                    compton
 
-useradd -d /home/josh -m -s /bin/bash -U josh
-
 sudo -u josh -i
 
 #mv /tmp/dotfiles/bashrc ~/.bashrc
