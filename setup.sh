@@ -49,6 +49,7 @@ for x in $(ls /tmp/dotfiles); do
   if [[ ${x} == "README.md" ]]; then
     continue
   fi
+  rm -rf "/home/josh/.${x}"
   mv -f /tmp/dotfiles/${x} "/home/josh/.${x}"
 done
 
