@@ -20,7 +20,6 @@ apt-get install -y i3 \
                    xbacklight \
                    clipit \
                    gcc \
-                   git \
                    terminator \
                    pcmanfm \
                    libnotify-bin \
