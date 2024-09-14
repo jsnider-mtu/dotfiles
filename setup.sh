@@ -14,10 +14,8 @@ apt-get install -y i3 \
                    pulseaudio \
                    conky-all \
                    handbrake-cli \
-                   brave \
                    ffmpeg \
                    fonts-font-awesome \
-                   xnumlock \
                    xbacklight \
                    clipit \
                    gcc \
