@@ -4,6 +4,46 @@ set -eo pipefail
 apt-get update -y
 
 apt-get install -y i3 \
+                   mpv \
+                   mtr-tiny \
+                   net-tools \
+                   p11-kit \
+                   p7zip \
+                   pm-utils \
+                   qpdf \
+                   remmina \
+                   screen \
+                   seahorse \
+                   simple-scan \
+                   sqlite3 \
+                   tcpdump \
+                   teleport \
+                   virt-manager \
+                   wget \
+                   xdg-utils \
+                   xinput \
+                   xkeycaps \
+                   xz-utils \
+                   yt-dlp \
+                   bc \
+                   brave-browser \
+                   code \
+                   curl \
+                   discord \
+                   docker.io \
+                   dos2unix \
+                   eog \
+                   fdisk \
+                   gimp \
+                   gnupg \
+                   gparted \
+                   gvncviewer \
+                   gzip \
+                   helm \
+                   jq \
+                   minecraft-launcher \
+                   steam-launcher \
+                   balena-etcher \
                    gngb \
                    xsel \
                    vim-gtk3 \
