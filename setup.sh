@@ -17,7 +17,6 @@ apt-get install -y i3 \
                    simple-scan \
                    sqlite3 \
                    tcpdump \
-                   teleport \
                    virt-manager \
                    wget \
                    xdg-utils \
@@ -26,10 +25,7 @@ apt-get install -y i3 \
                    xz-utils \
                    yt-dlp \
                    bc \
-                   brave-browser \
-                   code \
                    curl \
-                   discord \
                    docker.io \
                    dos2unix \
                    eog \
@@ -39,16 +35,10 @@ apt-get install -y i3 \
                    gparted \
                    gvncviewer \
                    gzip \
-                   helm \
                    jq \
-                   minecraft-launcher \
-                   steam-launcher \
-                   balena-etcher \
                    gngb \
                    xsel \
                    vim-gtk3 \
-                   nordvpn \
-                   kubectl \
                    openssl \
                    python3-pip \
                    gpg \
