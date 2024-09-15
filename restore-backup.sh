@@ -17,6 +17,8 @@ aws --profile backup s3 sync s3://sniderboy2005-backup/books ~/books
 
 aws --profile backup s3 sync s3://sniderboy2005-backup/reactions ~/reactions
 
+aws --profile backup s3 sync s3://sniderboy2005-backup/bsidesatl2024 ~/bsidesatl2024
+
 aws --profile backup s3 cp s3://sniderboy2005-backup/.bash_aliases ~/.bash_aliases
 
 aws --profile backup s3 cp s3://sniderboy2005-backup/bgupdate.sh ~/bgupdate.sh
@@ -28,3 +30,11 @@ aws --profile backup s3 cp s3://sniderboy2005-backup/torClientRC ~/torClientRC
 aws --profile backup s3 cp s3://sniderboy2005-backup/torServerRC ~/torServerRC
 
 aws --profile backup s3 cp s3://sniderboy2005-backup/update-golang.sh ~/update-golang.sh
+
+aws --profile backup s3 cp s3://sniderboy2005-backup/danknode.ident.py ~/danknode.ident.py
+
+aws --profile backup s3 cp s3://sniderboy2005-backup/openai_api_key ~/openai_api_key
+
+aws --profile backup s3 cp s3://sniderboy2005-backup/squareEnixEmergencyRemovalPassword ~/squareEnixEmergencyRemovalPassword
+
+aws --profile backup s3 cp s3://sniderboy2005-backup/vtapikey ~/vtapikey
