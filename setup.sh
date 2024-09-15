@@ -49,6 +49,7 @@ apt-get install -y system76-driver \
                    numlockx \
                    i3blocks \
                    mpd \
+                   mpc \
                    ncmpcpp \
                    feh \
                    vim \
