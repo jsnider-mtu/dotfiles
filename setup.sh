@@ -46,7 +46,7 @@ chown -R josh:josh /home/josh
 
 rm -rf /tmp/dotfiles
 
-gpg -d .aws/credentials.gpg -o .aws/credentials
+gpg -d /home/josh/.aws/credentials.gpg -o /home/josh/.aws/credentials
 
 pip install awscli --break-system-packages
 
