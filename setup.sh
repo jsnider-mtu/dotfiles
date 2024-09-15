@@ -4,7 +4,7 @@ set -eo pipefail
 apt-get update -y
 
 apt-get install -y i3 \
-                   awscli \
+                   python3-pip \
                    gpg \
                    qiv \
                    numlockx \
@@ -47,6 +47,8 @@ chown -R josh:josh /home/josh
 rm -rf /tmp/dotfiles
 
 gpg -d .aws/credentials.gpg -o .aws/credentials
+
+pip install awscli --break-system-packages
 
 aws --profile backup s3 sync s3://sniderboy2005-backup ~
 
