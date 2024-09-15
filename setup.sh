@@ -1,9 +1,12 @@
 #!/bin/bash
 set -eo pipefail
 
+apt-add-repository -y ppa:system76-dev/stable
+
 apt-get update -y
 
-apt-get install -y i3 \
+apt-get install -y system76-driver \
+                   i3 \
                    mpv \
                    mtr-tiny \
                    net-tools \
