@@ -46,10 +46,4 @@ chown -R josh:josh /home/josh
 
 rm -rf /tmp/dotfiles
 
-gpg -o /home/josh/.aws/credentials -d /home/josh/.aws/credentials.gpg
-
-pip install awscli --break-system-packages
-
-aws --profile backup s3 sync s3://sniderboy2005-backup ~
-
 reboot
