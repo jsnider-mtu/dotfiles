@@ -4,6 +4,12 @@ set -eo pipefail
 apt-get update -y
 
 apt-get install -y i3 \
+                   gngb \
+                   xsel \
+                   vim-gtk3 \
+                   nordvpn \
+                   kubectl \
+                   openssl \
                    python3-pip \
                    gpg \
                    qiv \
@@ -21,7 +27,7 @@ apt-get install -y i3 \
                    ffmpeg \
                    fonts-font-awesome \
                    xbacklight \
-                   clipit \
+                   diodon \
                    gcc \
                    terminator \
                    pcmanfm \
