@@ -6,6 +6,7 @@ apt-add-repository -y ppa:system76-dev/stable
 apt-get update -y
 
 apt-get install -y system76-driver \
+                   fonts-firacode \
                    i3 \
                    mpv \
                    mtr-tiny \
